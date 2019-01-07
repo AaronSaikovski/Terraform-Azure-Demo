@@ -1,0 +1,96 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServicePlanName": {
+      "value": "csa-test-appsvcplan-arm"
+    },
+    "webAppName": {
+      "value": "csa-test-appsvc-arm"
+    },
+    "operatingSystem": {
+      "value": "Windows"
+    },
+
+    "propertiesObject": {
+      "value": {
+        "properties": {
+
+        }
+      }
+    },
+    "skuPricingTierSize": {
+      "value": "F1"
+    },
+    "skuCapacity": {
+      "value": 1
+    },
+    "autoHealEnabled": {
+      "value": false
+    },
+    "autoHealRulesObject": {
+      "value": {
+        "rules": {
+          "triggers": {
+            "requests": null,
+            "privateBytesInKB": 0,
+            "statusCodes": [
+              {
+                "status": 500,
+                "subStatus": 0,
+                "win32Status": 0,
+                "count": 100,
+                "timeInterval": "00:01:00"
+              }
+            ],
+            "slowRequests": null
+          },
+          "actions": {
+            "actionType": "Recycle",
+            "customAction": null,
+            "minProcessExecutionTime": "00:00:00"
+          }
+        }
+      }
+    },
+    "netFrameworkVersion": {
+      "value": "v4.7"
+    },
+    "phpVersion": {
+      "value": "7.0"
+    },
+    "pythonVersion": {
+      "value": "Off"
+    },
+    "32Bit": {
+      "value": true
+    },
+    "http20Enabled": {
+      "value": true
+    },
+    "ftpsState": {
+      "value": "FtpsOnly"
+    },
+    "webSockets": {
+      "value": false
+    },
+    "alwaysOn": {
+      "value": false
+    },
+    "webServerLogging": {
+      "value": false
+    },
+    "detailedErrors": {
+      "value": false
+    },
+    "failedRequestTrace": {
+      "value": false
+    },
+    "clientAffinityEnabled": {
+      "value": false
+    },
+    "logSize": {
+      "value": 25
+    }   
+  }
+}

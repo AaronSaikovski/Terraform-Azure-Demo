@@ -1,0 +1,16 @@
+az login
+az account set --subscription="<YOUR-AZURESUBID>"
+az account show
+
+
+https://www.terraform.io/docs/providers/azurerm/auth/azure_cli.html
+
+terraform init
+
+terraform plan -var-file=dev-variables.tfvars
+
+terraform apply -var-file=dev-variables.tfvars
+
+terraform destroy -var-file=dev-variables.tfvars
+
+

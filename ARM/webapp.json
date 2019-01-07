@@ -1,0 +1,307 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServicePlanName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
+    "operatingSystem": {
+      "type": "string",
+      "defaultValue": "Windows",
+      "allowedValues": [
+        "Windows",
+        "Linux"
+      ]
+    },
+    "propertiesObject": {
+      "type": "object",
+      "metadata": {
+        "description": "Resource Tags to apply to this object."
+      },
+      "defaultValue": {
+        "properties": {
+
+        }
+      }
+    },
+    "skuPricingTierSize": {
+      "type": "string",
+      "defaultValue": "F1",
+      "allowedValues": [
+        "F1",
+        "D1",
+        "B1",
+        "B2",
+        "B3",
+        "S1",
+        "S2",
+        "S3",
+        "P1v2",
+        "P2v2",
+        "P3v2",
+        "I1",
+        "I2",
+        "I3"
+      ],
+      "metadata": {
+        "description": "Describes plan's pricing tier and capacity. Check details at https://docs.microsoft.com/en-us/azure/app-service/azure-web-sites-web-hosting-plans-in-depth-overview"
+      }
+    },
+    "skuCapacity": {
+      "type": "int",
+      "defaultValue": 1,
+      "minValue": 1,
+      "maxValue": 10,
+      "metadata": {
+        "description": "Describes plan's instance count"
+      }
+    },
+    "webAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "Names of the web app"
+      }
+    },
+    "autoHealEnabled": {
+      "type": "bool",
+      "defaultValue": false,
+      "allowedValues": [
+        true,
+        false
+      ]
+    },
+    "autoHealRulesObject": {
+      "type": "object",
+      "metadata": {
+        "description": "Resource Tags to apply to this object."
+      },
+      "defaultValue": {
+        "rules": {
+          "triggers": {
+            "requests": null,
+            "privateBytesInKB": 0,
+            "statusCodes": [
+              {
+                "status": 500,
+                "subStatus": 0,
+                "win32Status": 0,
+                "count": 100,
+                "timeInterval": "00:01:00"
+              }
+            ],
+            "slowRequests": null
+          },
+          "actions": {
+            "actionType": "Recycle",
+            "customAction": null,
+            "minProcessExecutionTime": "00:00:00"
+          }
+        }
+      }
+    },
+    "netFrameworkVersion": {
+      "type": "string",
+      "defaultValue": "v4.7",
+      "allowedValues": [
+        "v3.5",
+        "v4.7"
+      ]
+    },
+    "phpVersion": {
+      "type": "string",
+      "defaultValue": "7.1",
+      "allowedValues": [
+        "Off",
+        "5.6",
+        "7.0",
+        "7.1",
+        "7.2"
+      ]
+    },
+    "pythonVersion": {
+      "type": "string",
+      "defaultValue": "Off",
+      "allowedValues": [
+        "Off",
+        "2.7",
+        "3.4"
+      ]
+    },
+    "32Bit": {
+      "type": "bool",
+      "defaultValue": false,
+      "allowedValues": [
+        true,
+        false
+      ]
+    },
+    "http20Enabled": {
+      "type": "bool",
+      "defaultValue": false,
+      "allowedValues": [
+        true,
+        false
+      ]
+    },
+    "ftpsState": {
+      "type": "string",
+      "defaultValue": "FtpsOnly",
+      "allowedValues": [
+        "AllAllowed",
+        "FtpsOnly",
+        "Disabled"
+      ]
+    },
+    "webSockets": {
+      "type": "bool",
+      "defaultValue": false,
+      "allowedValues": [
+        true,
+        false
+      ]
+    },
+    "alwaysOn": {
+      "type": "bool",
+      "defaultValue": false,
+      "allowedValues": [
+        true,
+        false
+      ]
+    },
+    "webServerLogging": {
+      "type": "bool",
+      "defaultValue": true,
+      "allowedValues": [
+        true,
+        false
+      ]
+    },
+    "detailedErrors": {
+      "type": "bool",
+      "defaultValue": true,
+      "allowedValues": [
+        true,
+        false
+      ]
+    },
+    "failedRequestTrace": {
+      "type": "bool",
+      "defaultValue": true,
+      "allowedValues": [
+        true,
+        false
+      ]
+    },
+    "clientAffinityEnabled": {
+      "type": "bool",
+      "defaultValue": false,
+      "allowedValues": [
+        true,
+        false
+      ]
+    },
+    "logSize": {
+      "type": "int",
+      "defaultValue": 25,
+      "minValue": 25,
+      "maxValue": 100
+    },
+    "customSiteConfigs": {
+      "type": "object",
+      "metadata": {
+        "description": "Resource Tags to apply to this object."
+      },
+      "defaultValue": {
+        "siteConfig": {
+          "defaultDocuments": [
+            "Default.htm",
+            "Default.html",
+            "Default.asp",
+            "index.htm",
+            "index.html",
+            "iisstart.htm",
+            "default.aspx",
+            "index.php",
+            "hostingstart.html"
+          ]
+
+        }
+      }
+    }
+  },
+  "variables": {    
+    "skuTier": {
+      "F1": "Free",
+      "D1": "Shared",
+      "B1": "Basic",
+      "B2": "Basic",
+      "B3": "Basic",
+      "S1": "Standard",
+      "S2": "Standard",
+      "S3": "Standard",
+      "P1v2": "Premium",
+      "P2v2": "Premium",
+      "P3v2": "Premium",
+      "I1": "Isolated",
+      "I2": "Isolated",
+      "I3": "Isolated"
+    },
+    "managedSiteConfigs": {
+      "netFrameworkVersion": "[parameters('netFrameworkVersion')]",
+      "PhpVersion": "[parameters('phpVersion')]",
+      "pythonVersion": "[parameters('pythonVersion')]",
+      "use32BitWorkerProcess": "[parameters('32Bit')]",
+      "webSocketsEnabled": "[parameters('webSockets')]",
+      "alwaysOn": "[parameters('alwaysOn')]",
+      "requestTracingEnabled": "[parameters('failedRequestTrace')]",
+      "httpLoggingEnabled": "[parameters('webServerLogging')]",
+      "logsDirectorySizeLimit": "[parameters('logSize')]",
+      "detailedErrorLoggingEnabled": "[parameters('detailedErrors')]",
+      "autoHealEnabled": "[parameters('autoHealEnabled')]",
+      "autoHealRules": "[parameters('autoHealRulesObject').rules]",
+      "http20Enabled": "[parameters('http20Enabled')]",
+      "ftpsState": "[parameters('ftpsState')]"
+    },
+    "mysiteConfigs": "[union(variables('managedSiteConfigs'), parameters('customSiteConfigs').siteConfig)]"
+  },
+    "resources": [
+      {
+        "name": "[parameters('AppServicePlanName')]",
+        "type": "Microsoft.Web/serverfarms",
+        "apiVersion": "2016-09-01",
+        "kind": "[if(equals(parameters('operatingSystem'),'Windows'), 'app', 'Linux')]",
+        "location": "[resourceGroup().location]",
+        "properties": "[parameters('propertiesObject').properties]",
+        "sku": {
+          "name": "[parameters('skuPricingTierSize')]",
+          "tier": "[variables('skuTier')[parameters('skuPricingTierSize')]]",
+          "size": "[parameters('skuPricingTierSize')]",
+          "capacity": "[parameters('skuCapacity')]"
+        }
+      },
+      {
+        "name": "[parameters('webAppName')]",
+        "type": "Microsoft.Web/sites",
+        "location": "[resourceGroup().location]",
+        "apiVersion": "2016-08-01",
+        "dependsOn": [
+          "[concat('Microsoft.Web/serverfarms/', parameters('appServicePlanName'))]"
+        ],
+        "properties": {
+          "name": "[parameters('webAppName')]",
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('AppServicePlanName'))]",
+          "siteConfig": "[variables('mysiteConfigs')]",
+          "clientAffinityEnabled": "[parameters('clientAffinityEnabled')]"
+         
+        }        
+      }
+    ],
+     "outputs": {
+      "webAppURL": {
+        "type": "string",
+        "value": "[concat('https://', parameters('webAppName'),'.azurewebsites.net')]"
+      }
+     }
+}
